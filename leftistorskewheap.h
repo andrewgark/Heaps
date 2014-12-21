@@ -37,7 +37,7 @@ class LeftistOrSkewHeap: public IMeldableHeap
         ui32 rank;
         Node *left, *right;
 
-        explicit Node(int key) : key(key), rank(1), left(nullptr), right(nullptr){}
+        explicit Node(int key) : key(key), rank(1), left(NULL), right(NULL){}
 
         ~Node()
         {
@@ -63,7 +63,7 @@ class LeftistOrSkewHeap: public IMeldableHeap
     int size;
     virtual bool heapIsLeftist()
     {
-      return true;
+        return true;
     };
 
     int getRank(Node *node)
@@ -82,11 +82,18 @@ class LeftistOrSkewHeap: public IMeldableHeap
             firstNode->swapChildren();
         if (heapIsLeftist() && firstNode)
             firstNode->updateRank();
+        secondNode = NULL;
         return firstNode;
     }
 public:
-    LeftistOrSkewHeap(){}
-    ~LeftistOrSkewHeap(){}
+    LeftistOrSkewHeap(): root(NULL), size(0)
+    {
+    }
+
+    ~LeftistOrSkewHeap()
+    {
+        delete root;
+    }
 
     void insert(int key)
     {
@@ -96,8 +103,6 @@ public:
 
     void init(int key)
     {
-        root = nullptr;
-        size = 0;
         insert(key);
     }
 
@@ -107,6 +112,9 @@ public:
             throw ExtractFromEmptyHeapException();
         int min = root->key;
         Node *newRoot = meldedNode(root->left, root->right);
+        root->left = NULL;
+        root->right = NULL;
+        delete root;
         root = newRoot;
         --size;
         return min;
@@ -116,7 +124,6 @@ public:
     {
         size += anotherHeap.getSize();
         LeftistOrSkewHeap &anotherLeftistOrSkewHeap = dynamic_cast<LeftistOrSkewHeap&>(anotherHeap);
-        anotherHeap = LeftistOrSkewHeap();
         root = meldedNode(root, anotherLeftistOrSkewHeap.root);
     }
 
