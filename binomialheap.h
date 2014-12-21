@@ -9,6 +9,7 @@ class BinomialHeap: public IMeldableHeap
         Node *child, *brother;
 
         explicit Node(int key) : key(key), child(NULL), brother(NULL) {}
+
         ~Node()
         {
             delete child;
@@ -57,31 +58,27 @@ class BinomialHeap: public IMeldableHeap
             std::swap(firstNode, secondNode);
         secondNode->brother = firstNode->child;
         firstNode->child = secondNode;
+        secondNode = NULL;
         return firstNode;
     }
 
 public:
 
-    BinomialHeap(){}
-    ~BinomialHeap()
+    BinomialHeap(): size(0), minTree(NULL)
     {
-        //delete minTree;
-        //for (ui32 i = 0; i < trees.size(); ++i)
-        //    delete trees[i];
     }
+
+    ~BinomialHeap(){}
 
     void init(int key)
     {
-        size = 0;
-        minTree = NULL;
         insert(key);
     }
 
     void insert(int key)
     {
-        BinomialHeap newBinomialHeap = BinomialHeap(key);
-        IMeldableHeap &newHeap = dynamic_cast<IMeldableHeap&>(newBinomialHeap);
-        meld(newHeap);
+        BinomialHeap newBinomialHeap(key);
+        meld(newBinomialHeap);
     }
 
     int extractMin()

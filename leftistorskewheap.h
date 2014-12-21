@@ -61,10 +61,7 @@ class LeftistOrSkewHeap: public IMeldableHeap
 
     Node *root;
     int size;
-    virtual bool heapIsLeftist()
-    {
-        return true;
-    };
+    virtual bool heapIsLeftist() = 0;
 
     int getRank(Node *node)
     {
@@ -90,10 +87,7 @@ public:
     {
     }
 
-    ~LeftistOrSkewHeap()
-    {
-        delete root;
-    }
+    ~LeftistOrSkewHeap(){}
 
     void insert(int key)
     {
