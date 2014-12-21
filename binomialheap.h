@@ -8,7 +8,7 @@ class BinomialHeap: public IMeldableHeap
         int key;
         Node *child, *brother;
 
-        explicit Node(int key) : key(key), child(nullptr), brother(nullptr) {}
+        explicit Node(int key) : key(key), child(NULL), brother(NULL) {}
         ~Node()
         {
             delete child;
@@ -32,19 +32,19 @@ class BinomialHeap: public IMeldableHeap
     {
         BinomialHeap resultHeap;
         resultHeap.size = sizeOfTree - 1;
-        resultHeap.minTree = nullptr;
-        Node *previous = nullptr;
+        resultHeap.minTree = NULL;
+        Node *previous = NULL;
         for (Node *current = node->child; current; current = current->brother)
         {
             if (previous)
-                previous->brother = nullptr;
+                previous->brother = NULL;
             resultHeap.trees.push_back(current);
             if (!resultHeap.minTree || current->key < minTree->key)
                 resultHeap.minTree = current;
             previous = current;
         }
         std::reverse(resultHeap.trees.begin(), resultHeap.trees.end());
-        node->brother = node->child = nullptr;
+        node->brother = node->child = NULL;
         delete node;
         return resultHeap;
     }
@@ -63,12 +63,17 @@ class BinomialHeap: public IMeldableHeap
 public:
 
     BinomialHeap(){}
-    ~BinomialHeap(){}
+    ~BinomialHeap()
+    {
+        //delete minTree;
+        //for (ui32 i = 0; i < trees.size(); ++i)
+        //    delete trees[i];
+    }
 
     void init(int key)
     {
         size = 0;
-        minTree = nullptr;
+        minTree = NULL;
         insert(key);
     }
 
@@ -84,7 +89,7 @@ public:
         if (minTree)
         {
             int result = minTree->key;
-            trees[minTreeIndex] = nullptr;
+            trees[minTreeIndex] = NULL;
             ui32 minTreeSize = 1 << minTreeIndex;
             size -= minTreeSize;
             BinomialHeap minTreeBinomialHeap = heapFromTreeWithoutRoot(minTree, minTreeSize);
@@ -101,9 +106,9 @@ public:
         size += anotherHeap.getSize();
         BinomialHeap &binomialHeap = dynamic_cast<BinomialHeap&> (anotherHeap);
         anotherHeap = BinomialHeap();
-        trees.resize(std::max(trees.size(), binomialHeap.trees.size()) + 1, nullptr);
-        binomialHeap.trees.resize(trees.size(), nullptr);
-        Node *extraTree = nullptr;
+        trees.resize(std::max(trees.size(), binomialHeap.trees.size()) + 1, NULL);
+        binomialHeap.trees.resize(trees.size(), NULL);
+        Node *extraTree = NULL;
         for (ui32 i = 0; i < trees.size(); ++i)
             if (trees[i])
             {
@@ -112,19 +117,19 @@ public:
                 else if (binomialHeap.trees[i] || extraTree)
                 {
                     extraTree = meldNodes(trees[i], extraTree ? extraTree : binomialHeap.trees[i]);
-                    trees[i] = nullptr;
+                    trees[i] = NULL;
                 }
             }
             else
             {
                 trees[i] = meldNodes(extraTree, binomialHeap.trees[i]);
-                extraTree = nullptr;
+                extraTree = NULL;
             }
         while (trees.size() && !trees.back())
             trees.pop_back();
         binomialHeap.trees.clear();
-        binomialHeap.minTree = nullptr;
-        minTree = nullptr;
+        binomialHeap.minTree = NULL;
+        minTree = NULL;
         for (ui32 i = 0; i < trees.size(); ++i)
             if (trees[i] && (!minTree || (trees[i]->key < minTree->key)))
             {
